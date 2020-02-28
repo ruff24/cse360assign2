@@ -1,26 +1,40 @@
-// William Barnett
-// ID: 248
-// CSC360
-// File: SimepleList
+/*
+ * William Barnett
+ * ID: 248
+ * CSC360
+ * File: SimpleList.java
+ * 
+ * Description:
+ * A list that uses an array to store integers. Allowed add, remove, search, append the list.
+ * 
+ * GitHub URL:
+ * https://github.com/ruff24/cse360assign2.git
+ */
 
 package cse360assign2;
 
 class SimpleList {
 
+	// private int array "list"
 	private int[] list;
+	// counter to keep track of integers
 	private int count;
 	
+	// constructor creating space for the list 
+	// setting count to zero
 	SimpleList()
 	{
-		list = new int[10];	// allocates space for ten integers
+		list = new int[10];	
 		count = 0;
 	}
 
+	// adds an integer to the front of the list, pushing everything else back
 	void add(int x) 
 	{		
 		count++;
 		int[] temp;
 		
+		//  decides if list needs to be extended
 		if(count > list.length)
 		{
 			int newSize = list.length + (list.length /2);
@@ -28,7 +42,7 @@ class SimpleList {
 		}
 		else
 		{
-			temp = new int[10];
+			temp = new int[list.length];
 		}
 		
 		// adds element to the list
@@ -48,46 +62,39 @@ class SimpleList {
 	void remove(int x)
 	{
 		// indexing 
-		int index = 0;
+		int index = search(x);
 		
-		//starts the search
-		while(index <= count)
+		// if the search method did find the element
+		if(index != -1)
 		{
-			// comparing
-			if(x == list[index])
+			// removes the element by replacing it with the element after
+			while(index < count)
 			{
-				// removes the element by replacing it with the element after
-				while(index < count)
+				list[index] = list[index + 1];
+				index++;
+			}
+			
+			// brings down count
+			count--;
+			
+			// if less than 25% empty, using double for decimal
+			double percent = (count / (double) list.length);
+			
+			if (percent <= 0.25)
+			{
+				// floor of new size of list
+				int newSize = list.length / 2;
+				
+				// temp list with new size
+				int[] temp = new int[newSize + 1];
+				
+				for(int i = 0; i < count; i++)
 				{
-					list[index] = list[index + 1];
-					index++;
+					temp[i] = list[i];
 				}
-				// no repeats of the last two elements
-				list[index] = (Integer) null;
+				
+				list = temp;
 			}
-			// move onto next index
-			index++;
-		}
-		// brings down count
-		count--;
-		
-		// if less than 25% empty, using double for decimal
-		double percent = count / list.length;
-		
-		if (percent <= 0.25)
-		{
-			// floor of new size of list
-			int newSize = list.length / 2;
-			
-			// temp list with new size
-			int[] temp = new int[newSize];
-			
-			for(int i = 0; i <= count; i++)
-			{
-				temp[i] = list[i];
-			}
-			
-			list = temp;
 		}
 	}
 	
@@ -97,6 +104,7 @@ class SimpleList {
 		return count;
 	}
 	
+	// returns a string of all elements
 	public String toString()
 	{
 		// if there's nothing in the list, return nothing
@@ -114,11 +122,12 @@ class SimpleList {
 			s += (list[i] + " ");
 		}
 		
-		
 		// returns string
 		return s;
 	}
 	
+	// searches the list for an element
+	// returns a -1 if not found, the index if found
 	int search(int x)
 	{
 		// increments through the list
@@ -136,4 +145,45 @@ class SimpleList {
 		return -1;	
 	}
 	
+	// adds element to the back of the list
+	void append(int x)
+	{
+		count++;
+		
+		// determines if list needs extra space
+		if(count > list.length-1)
+		{
+			// creates temporary array with extended space
+			int newSize = list.length + (list.length /2);
+			
+			int[] temp = new int[newSize];
+			
+			for(int i = 0; i < count; i++)
+			{
+				temp[i] = list[i];
+			}
+			
+			list = temp;
+		}
+		
+			list[count -1] = x;
+	}
+	
+	// returns the first integer in list
+	int first()
+	{
+		return list[0];
+	}
+	
+	// returns last integer in list
+	int last()
+	{
+		return list[count -1];
+	}
+	
+	// returns the length of the list
+	int size()
+	{
+		return list.length;
+	}
 }
